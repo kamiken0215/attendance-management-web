@@ -11,17 +11,6 @@ export const attendancePageUsecase = () => {
   const fetchAttendances = async (userId: string, date: string) => {
     const result = await attndanceRepository().find(userId, date);
 
-    //  表示用に加工処理
-    return result;
-  };
-
-  /**
-   * userIdとdateに紐づいた当該月の出勤データ一覧を取得
-   * @return 出勤していない日を埋めた当該月の出勤データ | null
-   */
-  const searchAttendance = async (userId: string, date: string) => {
-    const result = await attndanceRepository().find(userId, date);
-
     if (!result) {
       return null;
     }
@@ -35,6 +24,20 @@ export const attendancePageUsecase = () => {
   };
 
   /**
+   * userIdとdateに紐づいた当該月の出勤データ一覧を取得
+   * @return 出勤していない日を埋めた当該月の出勤データ | null
+   */
+  const searchAttendance = async (userId: string, date: string) => {
+    const result = await attndanceRepository().find(userId, date);
+
+    if (!result) {
+      return null;
+    }
+
+    return result;
+  };
+
+  /**
    * 指定の出勤データの更新もしくは新規作成を行う
    * @return attendance | null
    */
@@ -43,13 +46,13 @@ export const attendancePageUsecase = () => {
     token: string,
     attendance: Attendance,
   ) => {
-    const result = await attndanceRepository().write(attendance, userId, token);
+    const result = await attndanceRepository().write(userId, token, attendance);
     return result;
   };
 
   /**
    * 指定の出勤データの削除を行う
-   * @return attendance | null
+   * @return response status code | null
    */
   const eliminateAttendances = async (
     userId: string,
@@ -183,7 +186,7 @@ const calcTotalWorkTime = (attenadnces: Attendance[]) => {
  * @param time HH:mm:ss
  * @return {string} yyyyMMdd HH:mm:ss
  */
-const formatDatetime = (date: string, time: string): string => {
+export const formatDatetime = (date: string, time: string): string => {
   let formatedDay: string = date;
   let formatedTime: string = time;
 
@@ -204,7 +207,7 @@ const formatDatetime = (date: string, time: string): string => {
  * @param str yyyyMMdd
  * @return {string} yyyy-MM-dd
  */
-const formatToDate = (str: string): string => {
+export const formatToDate = (str: string): string => {
   let yyyyMMdd: string = str;
 
   return [
@@ -221,7 +224,7 @@ const formatToDate = (str: string): string => {
  * @param str yyyyMMdd HH:mm:SS
  * @return {string} HH:mm:SS
  */
-const formatToOnlyTime = (str: string): string => {
+export const formatToOnlyTime = (str: string): string => {
   // yyyyMMdd HH:mm:SS -> HH:mm:SS
   let date: string = str;
 
