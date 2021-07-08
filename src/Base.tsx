@@ -1,13 +1,10 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { UserContext } from './contexts/UserContext';
 import { SnackbarContextProvider } from './contexts/SnackbarContext';
 import { User } from './services/attendance-management/models/User';
 import { getLocalStrage } from './utils/local-strage';
-import findLocalUser from '../src/services/find-local-user';
 
 import App from './App';
-import Snackbars from './components/common/atoms/Snackbars';
-import SimpleSnackbar from './components/common/atoms/SimpleSnackbar';
 import { loginPageUsecase } from './usecase/loginPageUsecase';
 
 const Base: FC = () => {

@@ -1,4 +1,4 @@
-import { Attendance } from 'services/attendance-management/models/Attendance';
+import { Attendance } from '../entities/Attendance';
 
 const blankData: Attendance = {
   user_id: '',

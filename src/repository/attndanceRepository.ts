@@ -1,4 +1,4 @@
-import { Attendance } from 'services/attendance-management/models/Attendance';
+import { Attendance } from '../entities/Attendance';
 import { formatDatetime } from '../utils/format-tools';
 
 export const attndanceRepository = () => {

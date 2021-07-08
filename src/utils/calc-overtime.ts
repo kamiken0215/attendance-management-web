@@ -1,4 +1,4 @@
-import { Attendance } from 'services/attendance-management/models/Attendance';
+import { Attendance } from '../entities/Attendance';
 import { calcTimeDiffernce, settings } from './calc-time-defferece';
 
 export const calcOverTime = (attendance: Attendance, baseTime: number) => {

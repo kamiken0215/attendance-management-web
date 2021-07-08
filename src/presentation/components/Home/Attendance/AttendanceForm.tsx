@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import React, { FC } from 'react';
 import { Attendance } from '../../../../entities/Attendance';
-import { FormControls } from '../../../../components/common/atoms/FormControls';
+import { FormControls } from '../../common/atoms/FormControls';
 import { Form } from '../../common/form/Form';
 import { getAttendanceOptions } from '../../../../entities/Attendance';
 

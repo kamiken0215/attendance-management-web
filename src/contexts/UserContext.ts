@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { User } from '../services/attendance-management/models/User';
+import { User } from '../entities/User';
 
 type UserContextValue = {
   user: User | null;

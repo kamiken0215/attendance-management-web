@@ -4,7 +4,7 @@ import { UserContext } from '../../../../../contexts/UserContext';
 import {
   Attendance,
   blankAttendance,
-} from '../../../../../services/attendance-management/models/Attendance';
+} from '../../../../../entities/Attendance';
 import AlertDialog from '../../../../components/common/dialog/AlertDialog';
 import { attendancePageUsecase } from '../../../../../usecase/attendancePageUsecase';
 

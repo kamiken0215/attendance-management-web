@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Attendance } from 'services/attendance-management/models/Attendance';
+import { Attendance } from '../../entities/Attendance';
 import { attendancePageUsecase } from 'usecase/attendancePageUsecase';
 
 /**

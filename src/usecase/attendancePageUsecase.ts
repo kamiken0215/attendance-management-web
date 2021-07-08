@@ -1,5 +1,5 @@
 import { attndanceRepository } from 'repository/attndanceRepository';
-import { Attendance } from 'services/attendance-management/models/Attendance';
+import { Attendance } from '../entities/Attendance';
 
 import { format, differenceInMinutes } from 'date-fns';
 

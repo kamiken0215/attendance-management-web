@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { UserContext } from './contexts/UserContext';
-import HomeContainer from './containers/Home/HomeCountainer';
+import HomeContainer from './presentation/containers/HomeContainer/HomeContainer';
 import LoginContainer from './presentation/containers/LoginContainer/LoginContainer';
 
 const App: FC = () => {
