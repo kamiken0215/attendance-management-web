@@ -1,48 +1,110 @@
-import React, { FC, useState } from 'react';
-import { Attendance } from '../../../../services/attendance-management/models/Attendance';
-import AttendancePopupContainer from './popup/AttendancePopupContainer';
-import AttendanceAlertContainer from './alert/AttendanceAlertContainer';
+import React, { FC, useContext, useState } from 'react';
+import { Attendances } from '../../../../entities/Attendances';
+import { getAttendanceClasseCodeByName } from '../../../../entities/AttendanceClasses';
+import { getAttendanceStatusCodeByName } from '../../../../entities/AttendanceStatus';
 import AttendanceDataTable from '../../../components/Home/Attendance/AttendanceDataTable';
 
+import Loader from '../../../components/common/atoms/Loader';
+import { AttendanceClassesContext } from '../../../../contexts/AttendanceClassesContext';
+import { AttendanceStatusContext } from '../../../../contexts/AttendanceStatusContext';
+import { MainPageContext } from '../../../../contexts/MainPageContext';
+import { UserContext } from '../../../../contexts/UserContext';
+import { attendancePageUsecase } from '../../../../usecase/attendancePageUsecase';
+import { SnackbarContext } from '../../../../contexts/SnackbarContext';
+import { PostOrDeleteResponse } from '../../../../entities/PostOrDeleteResponse';
+
 type props = {
-  attendances: Attendance[];
+  attendances: Attendances[];
 };
 
 const AttendanceDataTableContainer: FC<props> = ({ attendances = [] }) => {
   console.count(AttendanceDataTableContainer.name);
-  const [selectedRecord, setSelectedRecord] = useState<Attendance | null>(null);
-  const [openPopup, setOpenPopup] = useState(false);
-  const [openAlert, setOpenAlert] = useState(false);
 
-  const openInPopup = (rowData: any) => {
-    setSelectedRecord(rowData);
-    setOpenPopup(true);
+  const { toggleSnack } = useContext(SnackbarContext);
+  const { user: users } = useContext(UserContext);
+  const { attendanceClasses, attendanceStatus } = useContext(MainPageContext);
+
+  const rowAddHandler = (newData: Attendances) => {
+    alert(newData);
+    console.log(newData.startTime);
   };
 
-  const openInAlert = (rowData: any) => {
-    setSelectedRecord(rowData);
-    setOpenAlert(true);
+  const rowUpdateHandler = (newData: any, oldData: any) => {
+    const attendanceClassCode = getAttendanceClasseCodeByName(
+      attendanceClasses,
+      newData.attendanceClassName,
+    );
+
+    newData.attendanceClassCode = attendanceClassCode;
+
+    const attendanceStatusCode = getAttendanceStatusCodeByName(
+      attendanceStatus,
+      newData.attendanceStatusName,
+    );
+
+    newData.attendanceStatusCode = attendanceStatusCode;
+
+    newData.userId = users.userId;
+
+    //  validate
+    //  update
+    const data: Attendances = newData as Attendances;
+    let attendances: Attendances[] = new Array();
+    attendances.push(data);
+    console.log(attendances);
+
+    const update = async () => {
+      const result = (await attendancePageUsecase().writeAttendance(
+        users.token,
+        users.companyId,
+        attendances,
+      )) as PostOrDeleteResponse;
+
+      console.log(result);
+
+      if (result.ok) {
+        alert('更新完了');
+      } else {
+        alert('失敗');
+      }
+    };
+    update();
   };
 
-  return (
-    <div>
-      <AttendanceDataTable
-        attendances={attendances}
-        openInPopup={openInPopup}
-        openInAlert={openInAlert}
-      />
-      <AttendancePopupContainer
-        attendance={selectedRecord}
-        openPopup={openPopup}
-        setOpenPopup={openInPopup}
-      />
-      <AttendanceAlertContainer
-        attendance={selectedRecord}
-        openAlert={openAlert}
-        setOpenAlert={openInAlert}
-      />
-    </div>
-  );
+  const rowDeleteHandler = (oldData: any) => {
+    const eliminate = async () => {
+      const result = (await attendancePageUsecase().eliminateAttendances(
+        users.companyId,
+        users.departmentCode,
+        users.userId,
+        oldData.attendanceDate,
+        users.token,
+      )) as PostOrDeleteResponse;
+      if (result.ok) {
+        alert('削除完了');
+      } else {
+        alert('失敗');
+      }
+    };
+    eliminate();
+  };
+
+  if (!attendanceClasses || !attendanceStatus) {
+    return <Loader />;
+  } else {
+    return (
+      <div>
+        <AttendanceDataTable
+          attendances={attendances}
+          attendanceClasses={attendanceClasses}
+          attendanceStatus={attendanceStatus}
+          rowAddHandler={rowAddHandler}
+          rowUpdateHandler={rowUpdateHandler}
+          rowDeleteHandler={rowDeleteHandler}
+        />
+      </div>
+    );
+  }
 };
 
 export default AttendanceDataTableContainer;

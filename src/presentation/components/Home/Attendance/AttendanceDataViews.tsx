@@ -3,7 +3,6 @@ import React, { FC } from 'react';
 import StatusCardContaier from '../../common/atoms/StatusCardContainer';
 import DoughnutPlot from '../../common/graph/Doughnut';
 import LineChart from '../../common/graph/Line';
-import { User, blankUser } from '../../../../entities/User';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,19 +34,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type props = {
-  user: User;
   numOfAttendances: string;
   totalWorkedTime: string;
+  paidHolidays: string;
   labelList: string[];
   valueList: number[];
+  doughnutData: {
+    datasets: {
+      data: number[];
+      backgroundColor: string[];
+      borderColor: string;
+    }[];
+    labels: string[];
+  };
+  doughnutRate: string;
+  doughnutLabels: string[];
 };
 
 const AttendanceDataViews: FC<props> = ({
-  user = blankUser,
   numOfAttendances = '',
   totalWorkedTime = '',
+  paidHolidays = '',
   labelList = [],
   valueList = [],
+  doughnutData,
+  doughnutRate,
+  doughnutLabels,
 }) => {
   const classes = useStyles();
   return (
@@ -59,6 +71,7 @@ const AttendanceDataViews: FC<props> = ({
               header="出勤日数"
               text={numOfAttendances + ' 日'}
               icon="directions_run"
+              iconcolor="#CB366D"
             />
           </Grid>
           <Grid item xs={4}>
@@ -66,15 +79,15 @@ const AttendanceDataViews: FC<props> = ({
               header="総勤務時間"
               text={totalWorkedTime + ' h'}
               icon="av_timer"
+              iconcolor="#4455D4"
             />
           </Grid>
           <Grid item xs={4}>
             <StatusCardContaier
               header="残り有給"
-              text={
-                user.rest_paid_holidays + ' / ' + user.paid_holidays + ' 日'
-              }
+              text={paidHolidays + ' 日'}
               icon="hotel"
+              iconcolor="#F18C1F"
             />
           </Grid>
         </Grid>
@@ -87,7 +100,11 @@ const AttendanceDataViews: FC<props> = ({
         </Grid>
         <Grid item xs={4}>
           <Paper className={classes.graphPaperColor}>
-            <DoughnutPlot />
+            <DoughnutPlot
+              data={doughnutData}
+              rate={doughnutRate}
+              labelList={doughnutLabels}
+            />
           </Paper>
         </Grid>
       </Grid>

@@ -12,7 +12,7 @@ export const determineWeekday = (date: string): string => {
   }
 };
 
-const toDate = (yyyyMMdd: string) => {
+const toDate = (yyyyMMdd: string): Date => {
   const arr = (
     yyyyMMdd.substr(0, 4) +
     '/' +

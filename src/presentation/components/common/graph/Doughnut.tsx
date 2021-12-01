@@ -1,5 +1,4 @@
 import { Grid, makeStyles } from '@material-ui/core';
-import { useStyles } from '@material-ui/pickers/views/Calendar/Day';
 import React, { FC } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
@@ -87,7 +86,7 @@ const doughnutOptions = {
 // };
 
 type props = {
-  title: string;
+  title?: string;
   data: {
     datasets: {
       data: number[];
@@ -96,25 +95,32 @@ type props = {
     }[];
     labels: string[];
   };
+  rate: string;
+  labelList: string[];
 };
 
-const DoughnutPlot: FC = () => {
+const DoughnutPlot: FC<props> = ({
+  title,
+  data = graphdata,
+  rate = '',
+  labelList = ['完了:75件', '進行中:20件', '拒否:5件'],
+}) => {
   const classes = useStyle();
   return (
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={6}>
           <div className={classes.textAria}>
-            <h1>95%</h1>
-            <p>完了:75件</p>
-            <p>進行中:20件</p>
-            <p>拒否:5件</p>
+            <h1>{rate}</h1>
+            {labelList.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
           </div>
         </Grid>
         <Grid item xs={6}>
           <Doughnut
             type={Doughnut}
-            data={graphdata}
+            data={data}
             options={doughnutOptions}
             width={180}
             height={180}

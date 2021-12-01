@@ -22,6 +22,13 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import Settings from '@material-ui/icons/Settings';
+import Business from '@material-ui/icons/Business';
+import PeopleAlt from '@material-ui/icons/PeopleAlt';
+import Today from '@material-ui/icons/Today';
+import PermContactCalendar from '@material-ui/icons/PermContactCalendar';
+import { Snackbar } from '@material-ui/core';
+import { MenuType } from '../../containers/HomeContainer/HomeContainer';
 
 const drawerWidth = 240;
 
@@ -31,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
     },
     appBar: {
-      zIndex: theme.zIndex.drawer + 1,
+      zIndex: theme.zIndex.drawer + 999,
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -112,7 +119,12 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Home: FC = (props) => {
+type Props = {
+  handleOnClickMenu: (value: MenuType) => void;
+  children: JSX.Element[] | JSX.Element;
+};
+
+const Home: FC<Props> = ({ handleOnClickMenu, children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -174,30 +186,78 @@ const Home: FC = (props) => {
         </div>
         <Divider />
         <List className={classes.sidemenu}>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem
+            button
+            key={'attendance'}
+            onClick={() => handleOnClickMenu('attendance')}
+          >
+            <ListItemIcon>
+              <PermContactCalendar />
+            </ListItemIcon>
+            <ListItemText primary={'勤務データ'} />
+          </ListItem>
+          <ListItem
+            button
+            key={'userSetting'}
+            onClick={() => handleOnClickMenu('userSetting')}
+          >
+            <ListItemIcon>
+              <Settings />
+            </ListItemIcon>
+            <ListItemText primary={'各種設定'} />
+          </ListItem>
         </List>
-        <Divider />
+        <Divider style={{ background: '#fff' }} />
         <List className={classes.sidemenu}>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          <ListItem
+            button
+            key={'user'}
+            onClick={() => handleOnClickMenu('user')}
+          >
+            <ListItemIcon>
+              <PeopleAlt />
+            </ListItemIcon>
+            <ListItemText primary={'ユーザー'} />
+          </ListItem>
+          <ListItem
+            button
+            key={'adminSetting'}
+            onClick={() => handleOnClickMenu('adminSetting')}
+          >
+            <ListItemIcon>
+              <Business />
+            </ListItemIcon>
+            <ListItemText primary={'各種設定'} />
+          </ListItem>
+          <ListItem
+            button
+            key={'attendanceSetting'}
+            onClick={() => handleOnClickMenu('attendanceSetting')}
+          >
+            <ListItemIcon>
+              <Today />
+            </ListItemIcon>
+            <ListItemText primary={'勤怠データ設定'} />
+          </ListItem>
+          {/* {['ユーザー', '会社設定', '勤怠データ設定'].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index === 0 ? (
+                  <PeopleAlt />
+                ) : index === 1 ? (
+                  <Business />
+                ) : (
+                  <Today />
+                )}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
-          ))}
+          ))} */}
         </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {props.children}
+        {children}
       </main>
     </div>
   );

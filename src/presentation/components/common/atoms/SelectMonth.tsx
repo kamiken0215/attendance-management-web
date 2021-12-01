@@ -4,9 +4,12 @@ import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import jaLocale from 'date-fns/locale/ja';
 import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
+  DatePicker,
+  TimePicker,
+  DateTimePicker,
+  LocalizationProvider,
 } from '@material-ui/pickers';
+import TextField from '@material-ui/core/TextField';
 
 type Props = {
   format: string;
@@ -26,27 +29,21 @@ const SelectMonth: FC<Props> = ({
   id = '',
 }) => {
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={jaLocale}>
-      <Grid container justify="space-around">
-        <KeyboardDatePicker
-          disableToolbar
-          variant="inline"
-          format={format}
-          views={views}
-          margin="normal"
-          label={label}
-          id={id}
-          value={value}
-          onChange={(date) => {
-            console.log(date);
-            setValue(date);
-          }}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-      </Grid>
-    </MuiPickersUtilsProvider>
+    <LocalizationProvider dateAdapter={DateFnsUtils}>
+      <TimePicker
+        ampm={false}
+        mask="____/__"
+        inputFormat={format}
+        toolbarFormat={'year'}
+        label={label}
+        value={value}
+        onChange={(date) => {
+          console.log(date);
+          setValue(date);
+        }}
+        renderInput={(props) => <TextField {...props} />}
+      />
+    </LocalizationProvider>
   );
 };
 

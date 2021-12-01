@@ -12,12 +12,18 @@ type SelectedDateContext = {
 export const SelectedDateContext = createContext({} as SelectedDateContext);
 
 const AttendanceContainer: FC = () => {
-  const user = useContext(UserContext);
+  const users = useContext(UserContext);
   const [selectedDate, setSelectedDate] = useState(
     format(new Date(), 'yyyyMM'),
   );
 
-  const { data, loading } = useFetchAttendance(user.user.id, selectedDate);
+  const { data, loading } = useFetchAttendance(
+    users.user.companyId,
+    users.user.departmentCode,
+    users.user.userId,
+    selectedDate,
+    users.user.token,
+  );
 
   return (
     <SelectedDateContext.Provider value={{ selectedDate, setSelectedDate }}>

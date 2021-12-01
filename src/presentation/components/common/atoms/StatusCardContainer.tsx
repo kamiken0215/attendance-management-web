@@ -7,6 +7,7 @@ type props = {
   header: string;
   text: string;
   icon: string;
+  iconcolor: string;
 };
 
 const EnhancedStatusCard: FC<props> = ({
@@ -14,12 +15,13 @@ const EnhancedStatusCard: FC<props> = ({
   header = '',
   text = '',
   icon = '',
+  iconcolor = '',
 }) => {
   //isLoading = true;
   return isLoading ? (
     <Loader />
   ) : (
-    <StatusCard header={header} text={text} icon={icon} />
+    <StatusCard header={header} text={text} icon={icon} iconcolor={iconcolor} />
   );
 };
 

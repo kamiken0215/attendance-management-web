@@ -4,7 +4,17 @@ import { decrypt } from '../utils/crypto';
 
 export const loginPageUsecase = () => {
   const fetchUserInfo = async (email: string, password: string) => {
-    const user = await userRepository().find(email, password);
+    const user = await userRepository().findLoginUser(email, password);
+    return user;
+  };
+
+  const fetchToken = async (email: string, password: string) => {
+    const token = await userRepository().fetchToken(email, password);
+    return token;
+  };
+
+  const fetchAuthUser = async (token: string) => {
+    const user = await userRepository().findAuthUser(token);
     return user;
   };
 
@@ -16,7 +26,7 @@ export const loginPageUsecase = () => {
       return null;
     }
 
-    const user = await userRepository().find(
+    const user = await userRepository().findLoginUser(
       decrypt(encryptedEmail),
       decrypt(encryptedPass),
     );
@@ -24,5 +34,5 @@ export const loginPageUsecase = () => {
     return user;
   };
 
-  return { fetchUserInfo, fetchLocalUserInfo };
+  return { fetchToken, fetchAuthUser, fetchUserInfo, fetchLocalUserInfo };
 };

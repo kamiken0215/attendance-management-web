@@ -1,13 +1,16 @@
-import { Grid } from '@material-ui/core';
+import { Grid, Input } from '@material-ui/core';
 import React, { FC } from 'react';
 import { Attendance } from '../../../../entities/Attendance';
 import { FormControls } from '../../common/atoms/FormControls';
 import { Form } from '../../common/form/Form';
 import { getAttendanceOptions } from '../../../../entities/Attendance';
+import { DatePicker, DateTimePicker } from '@material-ui/pickers';
+import { DateTimeInput } from '../../common/atoms/DateTimePicker';
+import { Attendances, blankData } from '../../../../entities/Attendances';
 
 type props = {
-  values: any;
-  addOrEdit: (attendance: Attendance, resetForm: () => void) => void;
+  values: Attendances;
+  addOrEdit: (attendance: Attendances, resetForm: () => void) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleInputChange: (
     event: React.ChangeEvent<{
@@ -19,11 +22,12 @@ type props = {
 };
 
 const AttendanceFormContainer: FC<props> = ({
-  values = '',
+  values = blankData,
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => undefined,
   handleInputChange = () => undefined,
   resetForm = () => undefined,
 }) => {
+  console.log('form value is' + values);
   return (
     <div>
       <Form onSubmit={handleSubmit}>
@@ -32,36 +36,28 @@ const AttendanceFormContainer: FC<props> = ({
             <FormControls.DateInput
               name="attendance_date"
               label="出勤日"
-              value={values.attendance_date}
+              value={values.attendanceDate}
               color="primary"
               onChange={handleInputChange}
             />
-            <FormControls.TimeInput
-              name="start_time"
+            <FormControls.DateTimeInput
+              name="startTime"
               label="出勤日時"
-              value={values.start_time}
-              color="primary"
-              onChange={handleInputChange}
+              value={values.startTime}
+              handleOnChange={handleInputChange}
             />
-            <FormControls.TimeInput
-              name="end_time"
+            <FormControls.DateTimeInput
+              name="endTime"
               label="退勤日時"
-              value={values.end_time}
-              color="secondary"
-              onChange={handleInputChange}
+              value={values.endTime}
+              handleOnChange={handleInputChange}
             />
             <FormControls.Select
               name="attendance_class"
               label="出勤区分"
-              value={values.attendance_class}
+              value={values.attendanceClassCode}
               onChange={handleInputChange}
               options={getAttendanceOptions()}
-            />
-            <FormControls.TextInput
-              name="notes"
-              label="メモ"
-              value={values.notes}
-              onChange={handleInputChange}
             />
             <div>
               <FormControls.FormButton type="submit" text="SUBMIT" />

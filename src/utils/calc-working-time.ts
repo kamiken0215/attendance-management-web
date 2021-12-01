@@ -14,6 +14,7 @@ export const calcWorkingTime = (attendances: Attendance[]) => {
     const start = new Date(value.start_time);
     const end = new Date(value.end_time);
     const params = settings;
+    console.log(totalWorkTime);
     //  小数第一位を切り上げ
     params.numberOfDigit = 1;
     params.mathMode = 'round';

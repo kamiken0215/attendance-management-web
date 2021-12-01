@@ -3,8 +3,12 @@ import { loginPageUsecase } from '../../../usecase/loginPageUsecase';
 import LoginComponent from '../../components/Login/LoginComponent';
 import { UserContext } from '../../../contexts/UserContext';
 import { User } from '../../../entities/User';
+import { Users } from '../../../entities/Users';
+import { Token } from '../../../entities/Token';
+import { UserResponse } from '../../../entities/UserResponse';
 import { setLocalStrage } from '../../../utils/local-strage';
 import { encrypt } from '../../../utils/crypto';
+import { useHistory } from 'react-router-dom';
 
 export type LoginState = {
   username: string;
@@ -71,6 +75,8 @@ const LoginContainer: FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { setUser } = useContext(UserContext);
 
+  let history = useHistory();
+
   useEffect(() => {
     if (state.username.trim() && state.password.trim()) {
       dispatch({
@@ -87,17 +93,26 @@ const LoginContainer: FC = () => {
 
   const handleLogin = () => {
     const load = async () => {
-      const user = await loginPageUsecase().fetchUserInfo(
+      const token: Token = await loginPageUsecase().fetchToken(
         state.username,
         state.password,
       );
 
-      if (user) {
+      let userResponse: UserResponse;
+
+      if (token) {
+        userResponse = (await loginPageUsecase().fetchAuthUser(
+          token.token,
+        )) as UserResponse;
+      }
+
+      if (userResponse) {
         dispatch({
           type: 'loginSuccess',
           payload: 'Login Successfully',
         });
-        login(user as User);
+        console.log(userResponse.users);
+        login(userResponse.users, token.token);
       } else {
         dispatch({
           type: 'loginFailed',
@@ -109,10 +124,15 @@ const LoginContainer: FC = () => {
     load();
   };
 
-  const login = (user: User) => {
-    setLocalStrage('id', encrypt(state.password));
-    setLocalStrage('email', encrypt(state.username));
-    setUser(user);
+  const login = (users: Users[], token: string) => {
+    console.log(users[0]);
+    console.log(token);
+    if (users) {
+      setLocalStrage('token', token);
+      users[0].token = token;
+      setUser(users[0]);
+      history.push('/');
+    }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {

@@ -39,7 +39,10 @@ type Props = {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
-export const Form: FC<Props> = ({ children, onSubmit = () => undefined }) => {
+export const FormTEmp: FC<Props> = ({
+  children,
+  onSubmit = () => undefined,
+}) => {
   const classes = useStyle();
   return (
     <form className={classes.root} autoComplete="off" onSubmit={onSubmit}>

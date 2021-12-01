@@ -1,18 +1,16 @@
 import React, { FC, SyntheticEvent, useContext } from 'react';
-import { SnackbarContext } from '../../../../contexts/SnackbarContext';
-import { Attendance } from '../../../../entities/Attendance';
 import AttendanceSearchFormContainer from './AttendanceSearchFormContainer';
 import { Grid } from '@material-ui/core';
 import AttendanceDataViewsContentsContainer from './AttendanceDataViewsContainer';
 import AttendanceDataTableContainer from './AttendanceDataTableContainer';
 import { SelectedDateContext } from './AttendanceContainer';
+import { Attendances } from '../../../../entities/Attendances';
 
 type props = {
-  data: Attendance[];
+  data: Attendances[];
 };
 
 const AttendanceDataContentsContainer: FC<props> = ({ data = [] }) => {
-  console.count(AttendanceDataContentsContainer.name);
   const { selectedDate, setSelectedDate } = useContext(SelectedDateContext);
 
   const handleOnClick = (

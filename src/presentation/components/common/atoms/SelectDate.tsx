@@ -3,33 +3,21 @@ import React, { FC } from 'react';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import jaLocale from 'date-fns/locale/ja';
+import en from 'date-fns/locale/en-US';
 import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
+  DatePicker,
+  TimePicker,
+  DateTimePicker,
+  LocalizationProvider,
 } from '@material-ui/pickers';
-import { makeStyles } from '@material-ui/core';
-
-const useStyle = makeStyles((theme) => ({
-  root: {
-    '& .MuiSvgIcon-root': {
-      color: '#EEEEEE',
-    },
-  },
-  input: {
-    color: '#EEEEEE',
-  },
-  outline: {
-    color: '#FD7013',
-  },
-}));
+import TextField from '@material-ui/core/TextField';
 
 type Props = {
   format: string;
   views: Array<'year' | 'date' | 'month'>;
   label?: string;
-  value?: Date;
+  value?: string;
   setValue: (value: React.SetStateAction<Date>) => void;
-  onChange: (newValue: any) => void;
   id?: string;
 };
 
@@ -39,42 +27,23 @@ const SelectDate: FC<Props> = ({
   label = '',
   value = '',
   setValue = () => undefined,
-  onChange = () => undefined,
   id = '',
 }) => {
-  const classes = useStyle();
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={jaLocale}>
-      <Grid container justify="space-around">
-        <KeyboardDatePicker
-          className={classes.root}
-          disableToolbar
-          variant="inline"
-          format={format}
-          views={views}
-          margin="normal"
-          label={label}
-          id={id}
-          value={value}
-          onChange={(date) => {
-            console.log(date);
-            setValue(date);
-          }}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-          InputProps={{
-            className: classes.input,
-          }}
-          InputLabelProps={{
-            className: classes.input,
-          }}
-          FormHelperTextProps={{
-            className: classes.outline,
-          }}
-        />
-      </Grid>
-    </MuiPickersUtilsProvider>
+    // <LocalizationProvider dateAdapter={DateFnsUtils} locale={jaLocale}>
+    <DatePicker
+      inputFormat={format}
+      mask="__/__/____"
+      label={label}
+      value={value}
+      views={views}
+      onChange={(date) => {
+        console.log(date);
+        setValue(date);
+      }}
+      renderInput={(props) => <TextField {...props} disabled={true} />}
+    />
+    // </LocalizationProvider>
   );
 };
 

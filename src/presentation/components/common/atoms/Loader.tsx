@@ -18,7 +18,7 @@ export default function CircularIndeterminate() {
 
   return (
     <div className={classes.root}>
-      <Grid container alignItems="center" justify="center">
+      <Grid container alignItems="center" justifyContent="center">
         <Grid item>
           <CircularProgress />
         </Grid>

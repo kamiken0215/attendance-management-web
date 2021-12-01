@@ -1,4 +1,5 @@
 import { Attendance } from '../entities/Attendance';
+import { Attendances } from '../entities/Attendances';
 import { calcOverTime } from './calc-overtime';
 
 /**
@@ -9,7 +10,7 @@ import { calcOverTime } from './calc-overtime';
  * @return {{labels,values}} labels:labelのリスト values:labelに対応するvalueのリスト
  */
 export const createOvertimeList = (
-  attendances: Attendance[],
+  attendances: Attendances[],
   year: number,
   month: number,
 ) => {
@@ -30,7 +31,7 @@ export const createOvertimeList = (
     const yyyyMMdd = String(yy) + mm + dd;
     if (
       attendances[inner] != null &&
-      attendances[inner].attendance_date == yyyyMMdd
+      attendances[inner].attendanceDate == yyyyMMdd
     ) {
       values.push(calcOverTime(attendances[inner], baseTime));
 

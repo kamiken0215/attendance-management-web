@@ -14,39 +14,38 @@ import {
 } from '../../../../../usecase/attendancePageUsecase';
 import { SnackbarContext } from '../../../../../contexts/SnackbarContext';
 import { useForm } from '../../../../components/common/form/Form';
+import { Attendances, blankData } from '../../../../../entities/Attendances';
 
 type props = {
-  attendance: Attendance;
+  attendance: any;
   openPopup: boolean;
   setOpenPopup: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AttendancePopupContainer: FC<props> = ({
-  attendance = blankAttendance,
+  attendance = blankData,
   openPopup = false,
   setOpenPopup = () => undefined,
 }) => {
-  const user = useContext(UserContext);
-  //const [recordForEdit, setRecordForEdit] = useState();
-
+  const users = useContext(UserContext);
   const { toggleSnack } = useContext(SnackbarContext);
 
-  const addOrEdit = async (attendance: Attendance, resetForm: () => void) => {
-    let result: Attendance | null;
+  const addOrEdit = async (attendance: Attendances, resetForm: () => void) => {
+    let result: Attendances | null;
     result = await attendancePageUsecase().writeAttendance(
-      user.user.id,
-      user.user.token,
+      users.users.token,
       attendance,
     );
     if (result != null) {
       resetForm();
       setOpenPopup(false);
-      //reset(selectedDate);
       toggleSnack(true, 'success', 'データ登録完了');
     } else {
       toggleSnack(true, 'error', '登録失敗');
     }
   };
+
+  //  validation
 
   const { values, setValues, handleInputChange, resetForm } = useForm(
     attendance,
@@ -54,16 +53,21 @@ const AttendancePopupContainer: FC<props> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    addOrEdit(values, resetForm);
+    const ret = attendancePageUsecase().validate(values);
+    console.log(ret);
+    if (ret.length > 0) {
+      toggleSnack(true, 'warning', ret);
+    } else {
+      addOrEdit(values, resetForm);
+    }
   };
 
   useEffect(() => {
-    //  need to format of datetime
-    const theData = blankAttendance;
+    const theData = blankData;
     if (attendance != null) {
-      theData.attendance_date = formatToDate(attendance.attendance_date);
-      theData.start_time = formatToOnlyTime(attendance.start_time);
-      theData.end_time = formatToOnlyTime(attendance.end_time);
+      theData.attendanceDate = attendance.attendanceDate;
+      theData.startTime = attendance.startTime;
+      theData.endTime = attendance.endTime;
       setValues({
         ...theData,
       });

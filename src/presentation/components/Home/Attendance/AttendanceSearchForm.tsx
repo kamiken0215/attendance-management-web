@@ -1,17 +1,23 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
 import { FormControls } from '../../common/atoms/FormControls';
 import SearchIcon from '@material-ui/icons/Search';
 import { format } from 'date-fns';
+import DatePicker from '../../common/atoms/DatePicker';
 
 const useStyle = makeStyles((theme) => ({
   root: {
     display: 'flex',
     justifyContent: 'flex-end',
+    backgroundColor: '#393E46',
   },
   button: {
     margin: theme.spacing(2),
     width: '14rem',
+    fontWeight: 600,
+    fontSize: '1.2rem',
+    borderColor: '#c5c5c5',
+    border: 'solid',
     background: '#FD7013',
     color: '#EEEEEE',
     '& :hover': {
@@ -40,6 +46,8 @@ const AttendanceSearchForm: FC<props> = ({
 
   const [selectedMonth, setSelectedMonth] = useState(date);
 
+  const [selectedYearMonth, setselectedYearMonth] = useState(date);
+
   const formatMonth = (): string => {
     console.log('date is ===' + String(selectedMonth));
     if (selectedMonth != null) {
@@ -48,30 +56,18 @@ const AttendanceSearchForm: FC<props> = ({
       return '';
     }
   };
+  const handleOnSelectedMonth = (newValue) => {
+    setSelectedMonth(newValue);
+  };
 
   return (
     <div className={classes.root}>
-      <FormControls.SelectDate
-        format={'yyyy'}
-        views={['year']}
-        label={'年を選ぶ'}
-        value={selectedYear}
-        setValue={setSelectedYear}
-        onChange={(newValue) => {
-          setSelectedYear(newValue);
-        }}
-        id={'randommm'}
-      />
-      <FormControls.SelectDate
-        format={'MM'}
-        views={['month']}
-        label={'月を選ぶ'}
-        value={selectedMonth}
-        onChange={(newValue) => {
-          setSelectedMonth(newValue);
-        }}
-        setValue={setSelectedMonth}
-        id={'randomm'}
+      <DatePicker
+        format={'yyyy年MM月'}
+        views={['year', 'month']}
+        label={'年月選択'}
+        value={String(selectedYearMonth)}
+        setValue={setselectedYearMonth}
       />
 
       <Button
@@ -79,7 +75,7 @@ const AttendanceSearchForm: FC<props> = ({
         variant="contained"
         startIcon={<SearchIcon />}
         onClick={() =>
-          handleOnClick('q', String(selectedYear.getFullYear()) + formatMonth())
+          handleOnClick('q', String(format(selectedYearMonth, 'yyyyMM')))
         }
       >
         検索

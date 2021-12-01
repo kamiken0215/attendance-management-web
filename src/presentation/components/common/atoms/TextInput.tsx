@@ -22,6 +22,7 @@ const FormTextInput: FC<Props> = ({
       label={label}
       name={name}
       value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
     />
   );

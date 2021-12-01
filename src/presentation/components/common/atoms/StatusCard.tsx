@@ -40,9 +40,15 @@ type props = {
   header: string;
   text: string;
   icon: string;
+  iconcolor: string;
 };
 
-const StatusCard: FC<props> = ({ header = '', text = '', icon = '' }) => {
+const StatusCard: FC<props> = ({
+  header = '',
+  text = '',
+  icon = '',
+  iconcolor = '',
+}) => {
   const classes = useStyle();
 
   return (
@@ -51,12 +57,12 @@ const StatusCard: FC<props> = ({ header = '', text = '', icon = '' }) => {
         container
         wrap="nowrap"
         spacing={2}
-        justify="center"
+        justifyContent="center"
         alignItems="center"
       >
         <Grid item xs={4}>
           <div className={classes.icon}>
-            <Icon>{icon}</Icon>
+            <Icon style={{ color: iconcolor }}>{icon}</Icon>
           </div>
         </Grid>
         <Grid item xs={8}>

@@ -1,10 +1,11 @@
 import { Attendance } from '../entities/Attendance';
+import { Attendances } from '../entities/Attendances';
 import { calcTimeDiffernce, settings } from './calc-time-defferece';
 
-export const calcOverTime = (attendance: Attendance, baseTime: number) => {
+export const calcOverTime = (attendance: Attendances, baseTime: number) => {
   let diff: number = 0;
-  const start = new Date(attendance.start_time);
-  const end = new Date(attendance.end_time);
+  const start = new Date(attendance.startTime as Date);
+  const end = new Date(attendance.endTime as Date);
   const params = settings;
   //  小数第一位を切り上げ
   params.numberOfDigit = 10;

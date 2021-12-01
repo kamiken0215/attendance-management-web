@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import Loader from '../../../components/common/atoms/Loader';
-import { Attendance } from '../../../../services/attendance-management/models/Attendance';
 import AttendanceDataContentsContainer from './AttendanceDataContentsContainer';
+import { Attendances } from '../../../../entities/Attendances';
 
 type props = {
   loading?: boolean;
-  data: Attendance[];
+  data: Attendances[];
 };
 
 const EnhancedAttendanceDataContentsContainer: FC<props> = ({
